@@ -10,7 +10,7 @@ Install the Boost C++ libraries if they aren't already on your system. Also down
 1. Move your old `include.mk` file to a backup name like `include.mk.bak` if you are upgrading.
 2. Execute `./setup.sh` to generate your `include.mk` file and `bin` directory.
 3. Edit your `include.mk` file to point to the proper places in your system.
-3. Find out the boost libs on your system by going to the base `lib` directory where boost is installed and running a command like `ls *.a | grep boost`. Next with a program that does regex substitution get rid of all of the .a suffixes, and replace `\n^lib` with ` -l` to get names like -lboost%
+    3. Find out the boost libs on your system by going to the base `lib` directory where boost is installed and running a command like `ls *.a | grep boost`. Next with a program that does regex substitution get rid of all of the .a suffixes, and replace `\n^lib` with ` -l` to get names like -lboost%
 4. Add the `bin` directory to your system's path.
 5. Run `make` to build all of the scripts.
 
