@@ -66,7 +66,7 @@ int main(int ac, char* av[]){
       std::cout << chrom << '\t' << 0 << '\t' << len << std::endl;
     }else{
       std::cout << chrom << '\t' << 0 << '\t' << edge_len << std::endl;
-      std::cout << chrom << '\t' << len - edge_len << '\t' << edge_len << std::endl;
+      std::cout << chrom << '\t' << len - edge_len << '\t' << len << std::endl;
     }
   }
 
