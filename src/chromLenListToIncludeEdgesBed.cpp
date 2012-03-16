@@ -50,7 +50,7 @@ int main(int ac, char* av[]){
    * Loop over input file, and write out
    */
 
-  std::ifstream chromSizes(av[1]);
+  std::ifstream chromSizes(vm["chrom_sizes"].as<std::string>().c_str());
   std::string line;
 
   while(std::getline(chromSizes,line)){
