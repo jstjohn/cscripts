@@ -15,18 +15,18 @@ int main(int ac, char* av[]){
   /**
    * Set defaults and process arguments
    */
-  int edge_len = 4000;
+  int edge_len;
   std::stringstream usage;
 
-  usage << "Usage: " << av[0] << " chromSizes.lst (a file of 'chrom size' one per line)" << std::endl;
-  usage << "Options";
+  usage << "Options (some required)";
 
   po::options_description desc(usage.str());
-  std::stringstream edge_len_desc;
-  edge_len_desc << "Length from edges to include in bed file (default: " << edge_len << ")";
+
+
   desc.add_options()
       ("help", "produce help message")
-      ("edge_len", po::value<int>(), edge_len_desc.str().c_str())
+      ("chrom_sizes", po::value<std::string>(),"File of 'chrom size' one per line, (REQUIRED).")
+      ("edge_len", po::value<int>(&edge_len)->default_value(4000), "Length from edges to include in bed file.")
   ;
 
 
@@ -34,7 +34,7 @@ int main(int ac, char* av[]){
   po::store(po::parse_command_line(ac, av, desc), vm);
   po::notify(vm);
 
-  if (vm.count("help") || ac < 2) {
+  if (vm.count("help") || !vm.count("chrom_sizes")) {
       std::cerr << desc << std::endl;
       return 1;
   }
