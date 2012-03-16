@@ -1,2 +1,5 @@
 include.mk
 bin/
+.cproject
+.project
+*.swp
