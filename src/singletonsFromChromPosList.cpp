@@ -17,12 +17,13 @@
 namespace po = boost::program_options;
 
 
-void poslistreducetosingletons(std::vector<int> &poslist){
+std::vector<int> poslistreducetosingletons(std::vector<int> &poslist){
   std::vector<int>::iterator iter;
-
-  if(poslist.size() <= 1)
-    return;
-
+  std::vector<int> result;
+  if(poslist.size() <= 1){
+    std::copy(poslist.begin(),poslist.end(),result.begin());
+    return(result);
+  }
   int lensequential = 1;
   int lastval = poslist[0];
   //start at the second position and go to the end
@@ -34,10 +35,11 @@ void poslistreducetosingletons(std::vector<int> &poslist){
       // we just saw a sequential list of some length
       // ending at the previous position
       if(lensequential > 1){
-        poslist.erase(iter - (lensequential + 1), iter - 1);
-
         //reset sequential length tracker
         lensequential = 1;
+      }else{
+        //the previous position was a singleton
+        result.push_back(lastval);
       }
 
     }//end if/else over sequential check
@@ -45,9 +47,11 @@ void poslistreducetosingletons(std::vector<int> &poslist){
     lastval = currval;
   }//end loop
 
-  if(lensequential > 1){ //did we end on a sequence?
-    poslist.erase(iter - (lensequential + 1), iter); //iter should be poslist.end() here
+  if(lensequential == 1){ //did we end on a sequence?
+    result.push_back(lastval);
   }
+
+  return(result);
 }
 
 
