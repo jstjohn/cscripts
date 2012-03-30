@@ -36,7 +36,7 @@ int main(int ac, char* av[]){
 
   if (vm.count("help") || !vm.count("chrom_sizes")) {
       std::cerr << desc << std::endl;
-      return 1;
+      return(1);
   }
 
   if (vm.count("edge_len")) {

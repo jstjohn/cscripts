@@ -7,8 +7,8 @@ CPPINCLUDES=-I$(BOOSTINC)
 CINCLUDES=-I$(KENTINC) -I$(SAMTOOLS)
 CPPLIBARGS=-L$(BOOSTLIBDIR) $(BOOSTLIBS)
 CLIBARGS=-L$(KENTSOURCE) -L$(SAMTOOLS) -lbam -lkent -lm -lz 
-CFLAGS=-O3
-CXXFLAGS=-O3
+CFLAGS=-g -O2
+CXXFLAGS=-g -O2
 CPPSRCLIST=$(shell find $(SRCDIR) -type f -name '*.cpp')
 CSRCLIST=$(shell find $(SRCDIR) -type f -name '*.c')
 CPPSRCLISTNODIR=$(notdir $(CPPSRCLIST)) 
@@ -24,4 +24,6 @@ $(BINDIR)/%: $(SRCDIR)/%.cpp $(CPPHEADERS) $(CHEADERS)
 $(BINDIR)/%: $(SRCDIR)/%.c $(CHEADERS)
 	$(CC) $(CFLAGS) $(CINCLUDES) $(CLIBARGS) $< -o $@
 
+clean:
+	-rm ${CPPPROGRAMS} ${CPROGRAMS}
 
