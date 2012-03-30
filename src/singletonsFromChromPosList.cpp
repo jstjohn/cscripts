@@ -101,7 +101,7 @@ int main(int ac, char* av[]){
    * Loop over input file, and write out
    */
 
-  std::ifstream chromSizes(vm["chrom_sizes"].as<std::string>().c_str());
+  std::ifstream chromSizes(vm["chrom_pos_lst"].as<std::string>().c_str());
   std::map<std::string,std::vector<int> > chrom_to_poslst = read_file(chromSizes);
 
   std::map<std::string,std::vector<int> >::iterator iter;
