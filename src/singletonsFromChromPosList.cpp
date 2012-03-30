@@ -51,8 +51,8 @@ void poslistreducetosingletons(std::vector<int> &poslist){
 }
 
 
-std::map<std::string,std::vector<int> > read_file(std::ifstream chromSizes){
-  std::map<std::string,std::vector<int> > data = new std::map<std::string,std::vector<int> >();
+std::map<std::string,std::vector<int> > read_file(std::ifstream &chromSizes){
+  std::map<std::string,std::vector<int> > data;
   std::string line;
 
   while(std::getline(chromSizes,line)){
@@ -63,14 +63,7 @@ std::map<std::string,std::vector<int> > read_file(std::ifstream chromSizes){
     int pos;
 
     ss >> chrom >> pos;
-
-    std::vector<int> poslst = data.find(chrom);
-    //see if it exists, or isn't in the map yet
-    if(poslst == data.end()){
-      poslst = new std::vector<int>();
-      data.insert(std::make_pair(chrom, poslst));
-    }
-    poslst.push_back(pos);
+    data[chrom].push_back(pos);
   }
   return(data);
 }
@@ -129,8 +122,6 @@ int main(int ac, char* av[]){
 
   }
 
-  //free up the map
-  delete chrom_to_poslst;
 
 
 }
