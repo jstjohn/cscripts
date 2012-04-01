@@ -19,8 +19,10 @@ namespace po = boost::program_options;
 std::vector<int> poslistreducetosingletons(std::vector<int> &poslist){
   std::vector<int>::iterator iter;
   std::vector<int> result;
-  if(poslist.size() <= 1){
-    std::copy(poslist.begin(),poslist.end(),result.begin());
+  if(poslist.size() == 1){
+    result.push_back(poslist[0]);
+    return(result);
+  }else if(poslist.size() == 0){
     return(result);
   }
   int lensequential = 1;
