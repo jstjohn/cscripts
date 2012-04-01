@@ -9,7 +9,6 @@
 #include <fstream>
 #include <map>
 #include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
 #include <stdlib.h>
 
 
@@ -114,12 +113,13 @@ int main(int ac, char* av[]){
     std::vector<int>poslst = iter->second; //the value in this key->val pair
     std::string chrom = iter->first;
     //get rid of everything sequential in place
-    poslistreducetosingletons(poslst);
+    std::vector<int>reduceposlist = poslistreducetosingletons(poslst);
 
     std::vector<int>::iterator positer;
+
     //write out the remaining singleton positions
-    for(positer = poslst.begin(); positer != poslst.end(); ++positer){
-      std::cout << chrom << *positer << std::endl;
+    for(positer = reduceposlist.begin(); positer != reduceposlist.end(); ++positer){
+      std::cout << chrom << "\t" << *positer << std::endl;
     }
 
 
