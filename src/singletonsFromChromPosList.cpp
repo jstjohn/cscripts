@@ -70,13 +70,15 @@ void read_file_print_singles(ifstream &chromSizes){
     ss >> chrom >> pos;
 
 
-    if(last_chrom_poslst.size() > 0 && chrom != lastChrom){
-      vector<int>reduceposlist = poslistreducetosingletons(last_chrom_poslst);
-      vector<int>::iterator positer;
+    if(chrom != lastChrom){
+      if(last_chrom_poslst.size() > 0 ){
+        vector<int>reduceposlist = poslistreducetosingletons(last_chrom_poslst);
+        vector<int>::iterator positer;
 
-      //write out the remaining singleton positions
-      for(positer = reduceposlist.begin(); positer != reduceposlist.end(); ++positer){
-        cout << lastChrom << "\t" << *positer << endl;
+        //write out the remaining singleton positions
+        for(positer = reduceposlist.begin(); positer != reduceposlist.end(); ++positer){
+          cout << lastChrom << "\t" << *positer << endl;
+        }
       }
       //clear it up and set the last chrom to this one
       last_chrom_poslst.clear();
