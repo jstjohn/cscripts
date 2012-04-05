@@ -11,14 +11,14 @@
 #include <boost/program_options.hpp>
 #include <stdlib.h>
 
-
+using namespace std;
 
 namespace po = boost::program_options;
 
 
-std::vector<int> poslistreducetosingletons(std::vector<int> &poslist){
-  std::vector<int>::iterator iter;
-  std::vector<int> result;
+vector<int> poslistreducetosingletons(vector<int> &poslist){
+  vector<int>::iterator iter;
+  vector<int> result;
   if(poslist.size() == 1){
     result.push_back(poslist[0]);
     return(result);
@@ -56,29 +56,56 @@ std::vector<int> poslistreducetosingletons(std::vector<int> &poslist){
 }
 
 
-std::map<std::string,std::vector<int> > read_file(std::ifstream &chromSizes){
-  std::map<std::string,std::vector<int> > data;
-  std::string line;
-
-  while(std::getline(chromSizes,line)){
+void read_file_print_singles(ifstream &chromSizes){
+  string line;
+  string lastChrom = "nOtA_Ch*roM";
+  vector<int> last_chrom_poslst;
+  while(getline(chromSizes,line)){
     if(line.length() <= 1 || line[0] == '#')
       continue; //skip comments or blank lines
-    std::stringstream ss(line);
-    std::string chrom;
+    stringstream ss(line);
+    string chrom;
     int pos;
 
     ss >> chrom >> pos;
-    data[chrom].push_back(pos);
+
+
+    if(last_chrom_poslst.size() > 0 && chrom != lastChrom){
+      vector<int>reduceposlist = poslistreducetosingletons(last_chrom_poslst);
+      vector<int>::iterator positer;
+
+      //write out the remaining singleton positions
+      for(positer = reduceposlist.begin(); positer != reduceposlist.end(); ++positer){
+        cout << lastChrom << "\t" << *positer << endl;
+      }
+      //clear it up and set the last chrom to this one
+      last_chrom_poslst.clear();
+      lastChrom = chrom;
+    }
+
+    last_chrom_poslst.push_back(pos);
   }
-  return(data);
+
+
+  //one last time if there was anything else
+  if(last_chrom_poslst.size() > 0){
+    vector<int>reduceposlist = poslistreducetosingletons(last_chrom_poslst);
+    vector<int>::iterator positer;
+
+    //write out the remaining singleton positions
+    for(positer = reduceposlist.begin(); positer != reduceposlist.end(); ++positer){
+      cout << lastChrom << "\t" << *positer << endl;
+    }
+  }
 }
+
 
 int main(int ac, char* av[]){
   /**
    * Set defaults and process arguments
    */
   int edge_len;
-  std::stringstream usage;
+  stringstream usage;
 
   usage << "Options (some required)";
 
@@ -87,7 +114,7 @@ int main(int ac, char* av[]){
 
   desc.add_options()
       ("help", "produce help message")
-      ("chrom_pos_lst", po::value<std::string>(),"File of 'chrom pos' one per line, (REQUIRED).")
+      ("chrom_pos_lst", po::value<string>(),"File of 'chrom pos' one per line, (REQUIRED).")
   ;
 
 
@@ -96,37 +123,14 @@ int main(int ac, char* av[]){
   po::notify(vm);
 
   if (vm.count("help") || !vm.count("chrom_pos_lst")) {
-      std::cerr << desc << std::endl;
+      cerr << desc << endl;
       return(1);
   }
 
 
+  ifstream chromSizes(vm["chrom_pos_lst"].as<string>().c_str());
 
-  /**
-   * Loop over input file, and write out
-   */
-
-  std::ifstream chromSizes(vm["chrom_pos_lst"].as<std::string>().c_str());
-  std::map<std::string,std::vector<int> > chrom_to_poslst = read_file(chromSizes);
-
-  std::map<std::string,std::vector<int> >::iterator iter;
-
-  for(iter=chrom_to_poslst.begin(); iter != chrom_to_poslst.end(); ++iter){
-    std::vector<int>poslst = iter->second; //the value in this key->val pair
-    std::string chrom = iter->first;
-    //get rid of everything sequential in place
-    std::vector<int>reduceposlist = poslistreducetosingletons(poslst);
-
-    std::vector<int>::iterator positer;
-
-    //write out the remaining singleton positions
-    for(positer = reduceposlist.begin(); positer != reduceposlist.end(); ++positer){
-      std::cout << chrom << "\t" << *positer << std::endl;
-    }
-
-
-
-  }
+  read_file_print_singles(chromSizes);
 
 
 
