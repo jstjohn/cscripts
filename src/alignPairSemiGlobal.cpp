@@ -39,6 +39,28 @@ map<CharString,Dna5String> readFastaStream(fstream &stream){
   return(seqHash);
 }
 
+pair<Dna5String,Dna5String> getPairFromFasta(fstream &stream, string id1, string id2){
+  RecordReader<fstream, SinglePass<> > reader(stream);
+  CharString id;
+  Dna5String seq;
+  Dna5String seq1;
+  Dna5String seq2;
+  while(!atEnd(reader))
+  {
+    if (readRecord(id, seq, reader, Fasta()) != 0)
+    {
+      cerr << "ERROR reading FASTA." << endl;
+    }
+    if(id == id1){
+      seq1 = seq;
+    }
+    if(id == id2){
+      seq2 = seq;
+    }
+  }
+  return(pair<Dna5String,Dna5String>(seq1,seq2));
+}
+
 
 int main(int ac, char* av[]){
   /**
@@ -81,23 +103,27 @@ int main(int ac, char* av[]){
     return(1);
   }
 
-  map<CharString,Dna5String> records = readFastaStream(fastaStream);
+  //map<CharString,Dna5String> records = readFastaStream(fastaStream);
+
+  pair<Dna5String,Dna5String> seq1_2 = getPairFromFasta(fastaStream, vm["sid1"].as<string>(), vm["sid2"].as<string>());
+
 
   typedef StringSet<Dna5String,Dependent<> > TDepStringSet;
   typedef Graph<Alignment<TDepStringSet> > TAlignGraph;
 
   StringSet<Dna5String> seqs;
-  appendValue(seqs, records[vm["sid1"].as<string>()]);
+  appendValue(seqs, seq1_2.first);
 
   if(vm.count("reverse")){
-    reverseComplement(records[vm["sid2"].as<string>()]);
+    reverseComplement(seq1_2.second);
   }
 
-  appendValue(seqs, records[vm["sid2"].as<string>()]);
+  appendValue(seqs, seq1_2.second);
 
   TAlignGraph alignG(seqs);
   AlignConfig<true,true,true,true> aconfig; //no end-gap penalties
-  int score = globalAlignment(alignG, Score<int>(1,-1,-1,-1), aconfig, Gotoh());
+  // Score(TValue _match, TValue _mismatch, TValue _gap_extend, TValue _gap_open)
+  int score = globalAlignment(alignG, Score<int>(1,-2,-1,-2), aconfig, BandedGotoh());
 
   cout << alignG << endl;
 
