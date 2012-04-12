@@ -57,8 +57,9 @@ int main(int ac, char* av[]){
       ("fasta", po::value<string>(),"Fasta file with at least the two records, (REQUIRED).")
       ("sid1", po::value<string>(),"Id of the first record to align in file, (REQUIRED).")
       ("sid2", po::value<string>(),"Id of the second record to align in file, (REQUIRED).")
-      ("outAln", po::value<string>(),"Outfile name to write optional alignment.")
-      ("out", po::value<string>(),"Outfile name to write consensus, (REQUIRED).")
+      ("reverse", "Search on the reverse string?")
+      //("outAln", po::value<string>(),"Outfile name to write optional alignment.")
+      //("out", po::value<string>(),"Outfile name to write consensus, (REQUIRED).")
       ;
 
 
@@ -66,7 +67,7 @@ int main(int ac, char* av[]){
   po::store(po::parse_command_line(ac, av, desc), vm);
   po::notify(vm);
 
-  if (vm.count("help") || !vm.count("fasta") || !vm.count("out") || !vm.count("sid1") || !vm.count("sid2")) {
+  if (vm.count("help") || !vm.count("fasta") || /*!vm.count("out") ||*/ !vm.count("sid1") || !vm.count("sid2")) {
       cerr << desc << endl;
       return(1);
   }
@@ -87,7 +88,13 @@ int main(int ac, char* av[]){
 
   StringSet<Dna5String> seqs;
   appendValue(seqs, records[vm["sid1"].as<string>()]);
+
+  if(vm.count("reverse")){
+    reverseComplement(records[vm["sid2"].as<string>()]);
+  }
+
   appendValue(seqs, records[vm["sid2"].as<string>()]);
+
   TAlignGraph alignG(seqs);
   AlignConfig<true,true,true,true> aconfig; //no end-gap penalties
   int score = globalAlignment(alignG, Score<int>(1,-1,-1,-1), aconfig, Gotoh());
