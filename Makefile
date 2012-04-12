@@ -3,7 +3,7 @@ SRCDIR=src
 BINDIR=bin
 CHEADERS=$(shell find $(SRCDIR) -type f -name '*.h')
 CPPHEADERS=$(shell find $(SRCDIR) -type f -name '*.hpp')
-CPPINCLUDES=-I$(BOOSTINC) -I./seqan-1.3.1 -DSEQAN_HAS_ZLIB=1
+CPPINCLUDES=-I$(BOOSTINC) -I./seqan -DSEQAN_HAS_ZLIB=1
 CINCLUDES=-I$(KENTINC) -I$(SAMTOOLS)
 CPPLIBARGS=-L$(BOOSTLIBDIR) $(BOOSTLIBS)
 CLIBARGS=-L$(KENTSOURCE) -L$(SAMTOOLS) -lbam -lkent -lm -lz 
