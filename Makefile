@@ -7,8 +7,6 @@ CPPINCLUDES=-I$(BOOSTINC) -I./seqan -DSEQAN_HAS_ZLIB=1
 CINCLUDES=-I$(KENTINC) -I$(SAMTOOLS)
 CPPLIBARGS=-L$(BOOSTLIBDIR) $(BOOSTLIBS)
 CLIBARGS=-L$(KENTSOURCE) -L$(SAMTOOLS) -lbam -lkent -lm -lz 
-CFLAGS=-g -O2
-CXXFLAGS=-g -O2
 CPPSRCLIST=$(shell find $(SRCDIR) -type f -name '*.cpp')
 CSRCLIST=$(shell find $(SRCDIR) -type f -name '*.c')
 CPPSRCLISTNODIR=$(notdir $(CPPSRCLIST)) 

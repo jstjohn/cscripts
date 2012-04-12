@@ -5,6 +5,8 @@ echo "Making example include.mk, please edit to point to things on your computer
 cat > include.mk <<EOF
 CC=gcc44
 CXX=g++44
+CFLAGS=-g -O2
+CXXFLAGS=-g -O2
 KENTSOURCE=\$(HOME)/src/KentLib
 SAMTOOLS=\$(KENTSOURCE)/thirdparty/samtools
 KENTINC=\$(KENTSOURCE)/include
