@@ -14,6 +14,7 @@
 #include <seqan/basic.h>
 #include <seqan/sequence.h>
 #include <seqan/stream.h>
+#include <seqan/consensus.h>
 
 using namespace std;
 using namespace seqan;
