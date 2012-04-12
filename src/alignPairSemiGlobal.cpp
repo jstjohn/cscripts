@@ -123,7 +123,7 @@ int main(int ac, char* av[]){
   TAlignGraph alignG(seqs);
   AlignConfig<true,true,true,true> aconfig; //no end-gap penalties
   // Score(TValue _match, TValue _mismatch, TValue _gap_extend, TValue _gap_open)
-  int score = globalAlignment(alignG, Score<int>(1,-2,-1,-2), aconfig, 50, 50, BandedGotoh());
+  int score = globalAlignment(alignG, Score<int>(1,-2,-1,-2), aconfig, Gotoh());
 
   cout << alignG << endl;
 
